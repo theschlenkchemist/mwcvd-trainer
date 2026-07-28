@@ -10,6 +10,7 @@ import RigView from './ui/RigView'
 import RenderedView from './ui/RenderedView'
 import { FaultPanel, GasPanel, GeneratorPanel, PyrometerPanel, TunerPanel, UtilitiesPanel, VacuumPanel } from './ui/Panels'
 import { Checklist, GrowthPanel, LogView } from './ui/SidePanels'
+import Coach from './ui/Coach'
 
 const DT = 0.1
 
@@ -96,6 +97,7 @@ export default function App() {
         </div>
 
         <div className="col right">
+          <Coach s={s} d={d} />
           <Checklist s={s} />
           <PyrometerPanel s={s} d={d} />
           <UtilitiesPanel s={s} d={d} />
