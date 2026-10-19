@@ -39,7 +39,7 @@ export class DialogueManager {
           if (tk.kind && tk.kind !== l.kind) continue
           if (tk.contains && !l.text.includes(tk.contains)) continue
           for (const line of d.lines) {
-            emitted.push({ id: d.id, text: line.text, choices: d.choices })
+            emitted.push({ id: d.id, text: d.useLogText ? l.text : line.text, choices: d.choices })
           }
           if (d.once) this.played.add(d.id)
         }

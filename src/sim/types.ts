@@ -119,6 +119,10 @@ export interface StuckState {
   timeOnStep: number
   /** True while microwave power is applied but the discharge has not lit. */
   strikeAttemptStarted: number | null
+  /** Discrete operator moves since the active procedure step last advanced. */
+  actionsSinceProgress: number
+  /** Whether the "no progress" suggestion has already been shown for this step. */
+  stuckHintShown: boolean
 }
 
 export interface SimState {

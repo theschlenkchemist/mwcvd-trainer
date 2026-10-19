@@ -21,12 +21,17 @@ export function coach(s: SimState, dt: number) {
   if (!current) {
     s.stuck.currentStep = ''
     s.stuck.timeOnStep = 0
+    s.stuck.actionsSinceProgress = 0
+    s.stuck.stuckHintShown = false
     return
   }
 
   if (current.id !== s.stuck.currentStep) {
+    // The trainee just advanced a step: clear the stuck counters.
     s.stuck.currentStep = current.id
     s.stuck.timeOnStep = 0
+    s.stuck.actionsSinceProgress = 0
+    s.stuck.stuckHintShown = false
     return
   }
 
@@ -39,5 +44,13 @@ export function coach(s: SimState, dt: number) {
   }
   if (before < TELL_AFTER && after >= TELL_AFTER) {
     log(s, 'hint', `Stuck on "${current.title}". Do this: ${current.detail}`)
+  }
+
+  // Three discrete moves without the procedure advancing: surface a suggestion
+  // in the Coach box once, for the step the trainee is actually on.
+  if (s.stuck.actionsSinceProgress >= 3 && !s.stuck.stuckHintShown) {
+    s.stuck.stuckHintShown = true
+    const tip = current.hint ?? current.detail
+    log(s, 'hint', `Not advancing on "${current.title}". ${tip}`)
   }
 }

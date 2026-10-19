@@ -58,8 +58,8 @@ const strikeH2CH4: Step[] = [
   {
     id: 'strikepressure',
     title: 'Set strike pressure',
-    detail: 'Exhaust valve to AUTO, pressure setpoint 20 Torr. Wait for the reading to settle.',
-    done: (s) => s.throttleMode === 'auto' && s.chamber.pressure > 15 && s.chamber.pressure < 25,
+    detail: 'Exhaust valve to AUTO, pressure setpoint 15 Torr. Wait for the reading to settle (SOP step 14).',
+    done: (s) => s.throttleMode === 'auto' && s.chamber.pressure > 11 && s.chamber.pressure < 22,
   },
   {
     id: 'genstandby',
@@ -71,7 +71,7 @@ const strikeH2CH4: Step[] = [
     id: 'strike',
     title: 'Strike the plasma',
     detail:
-      'Set 700 W, press START. In hydrogen at 20 Torr the discharge should light within a couple of seconds. If it does not, drop to 15 Torr and retune rather than winding the power up.',
+      'Set 700 W (0.70 kW), press START. The discharge should light within a couple of seconds. If it does not, tune the stubs: around 0.32 kW reflected it usually strikes. If it still will not light, drop pressure until it does, but never below 10 Torr. Do not sit above 0.35 kW reflected for more than a minute.',
     done: (s) => s.plasma.lit,
   },
   {
@@ -85,7 +85,7 @@ const strikeH2CH4: Step[] = [
     id: 'ramp',
     title: 'Ramp to run condition',
     detail:
-      'Take pressure and power up together in steps of roughly 5 Torr and 50 W, retuning at each step. Target 40 to 60 Torr and 800 to 1000 W. Never raise power far ahead of pressure, or the ball expands upward toward the quartz window.',
+      'Set the pressure first, then dial the power up slowly to follow it. Rule of thumb: power in watts is about ten times the pressure in Torr (P \u2248 10p). Go up in steps of roughly 5 Torr and 50 W, retuning at each step. Never raise power far ahead of pressure, or the ball expands toward the quartz window.',
     done: (s) => s.plasma.lit && s.chamber.pressure > 38 && s.generator.forward > 750,
   },
   {
@@ -99,7 +99,7 @@ const strikeH2CH4: Step[] = [
     id: 'ch4',
     title: 'Admit methane',
     detail:
-      'Open the CH4 cylinder and panel valve, enable channel 2 and set 3 sccm, giving about 1 percent in hydrogen. The plasma should take on a green cast from the C2 Swan bands.',
+      'Once at growth pressure (the SOP turns methane on at about 50 Torr), open the CH4 cylinder and panel valve, enable channel 2 and set 3 sccm, about 1 percent in hydrogen. The plasma takes on a green cast from the C2 Swan bands.',
     done: (s) => gasesReady(s, ['CH4']) && s.mfc.CH4.actual > 2,
   },
 ]
@@ -109,7 +109,7 @@ const strikeCO2CH4: Step[] = [
     id: 'premix',
     title: 'Establish the CO2 and CH4 flows',
     detail:
-      'Open both cylinders and panel valves. Set CH4 to 52 sccm on channel 2 and CO2 to 48 sccm on channel 3. Remember the MFCs are nitrogen calibrated, so the indicated ratio is not the true ratio. The true mixture must sit just on the carbon rich side of the CO tie line, near 51 to 55 percent CH4.',
+      'Open both cylinders and panel valves. Set CH4 to about 54 sccm on channel 2 and CO2 to about 46 sccm on channel 3, slightly carbon rich of the CO tie line. The MFCs are nitrogen calibrated, so the indicated ratio is not the true ratio. These are illustrative training values, not real process conditions.',
     done: (s) => gasesReady(s, ['CH4', 'CO2']) && s.mfc.CH4.actual > 20 && s.mfc.CO2.actual > 20,
     hint: 'Each gas needs three things on before it flows: the cylinder valve, the panel isolation valve, and the 647C channel. Check all three columns in the gas panel.',
   },
@@ -132,9 +132,9 @@ const strikeCO2CH4: Step[] = [
     id: 'strike2',
     title: 'Strike the plasma',
     detail:
-      'Pre-position the stubs near the unlit match, set 500 W, press START. This mixture should light readily and at noticeably lower power than H2/CH4. If it will not light within about ten seconds, stop, drop a few Torr, retune, and try again rather than winding the power up.',
+      'Pre-position the stubs near the unlit match, set 700 W (0.70 kW), press START, the same striking power as the H2 route. If it will not light, tune the stubs, then drop pressure a little, but never below 10 Torr. Do not sit above 0.35 kW reflected for more than a minute.',
     done: (s) => s.plasma.lit,
-    hint: 'Set the power setpoint to about 500 W, make sure the generator is in STAND BY, then press START.',
+    hint: 'Set the power setpoint to about 0.70 kW, make sure the generator is in STAND BY, then press START.',
   },
   {
     id: 'tune2',
@@ -147,16 +147,16 @@ const strikeCO2CH4: Step[] = [
     id: 'ramp2',
     title: 'Ramp to run condition',
     detail:
-      'Raise pressure and power together to roughly 40 to 55 Torr and 600 to 800 W. The discharge should be white to blue white from CO band emission. Watch the ball position, because there is no hydrogen buffer and it can sit high.',
-    done: (s) => s.plasma.lit && s.chamber.pressure > 38 && s.generator.forward > 550,
+      'Set the pressure first, then dial power up to follow it (P \u2248 10p as a rough guide), as on the H2 route. Raise them together to roughly 45 Torr and about 1.1 kW. The discharge should be white to blue white from CO band emission. Watch the ball position, there is no hydrogen buffer so it can sit high.',
+    done: (s) => s.plasma.lit && s.chamber.pressure > 38 && s.generator.forward > 950,
     hint: 'Go up in steps of about 5 Torr and 50 W, retuning the stubs each time. Do not raise power ahead of pressure.',
   },
   {
     id: 'temp2',
     title: 'Settle the substrate temperature',
     detail:
-      'For the low temperature work aim for roughly 450 to 650 degrees C. Trim with power rather than pressure once the match is good.',
-    done: (s) => s.thermal.substrate > 400,
+      'The oxygen in the mix makes this run cooler than the H2/CH4 route, so a little more power is needed. Aim for about 680 C. Trim with power once the match is good.',
+    done: (s) => s.thermal.substrate > 620,
   },
   {
     id: 'ratio',
@@ -226,11 +226,11 @@ export function procedureFor(recipe: Recipe): Step[] {
 
 export const RECIPE_TARGETS: Record<Recipe, { label: string; text: string }> = {
   CO2CH4: {
-    label: 'CO\u2082 / CH\u2084 low temperature',
-    text: 'CH4 52 sccm, CO2 48 sccm, strike 12 Torr at 1000 W, run 45 Torr at 1000 W, substrate 450 to 650 C, plasma white to blue white.',
+    label: 'CO\u2082 / CH\u2084 (illustrative)',
+    text: 'Illustrative training values, not real process conditions. Strike 15 Torr at 0.70 kW as the H2 route, ramp with P \u2248 10p, run ~45 Torr at ~1.1 kW, substrate about 680 C. Plasma white to blue white.',
   },
   H2CH4: {
     label: 'H\u2082 / CH\u2084 standard',
-    text: 'H2 300 sccm, CH4 3 sccm, strike 20 Torr at 700 W, run 45 Torr at 900 W, substrate 750 to 900 C, plasma pink shifting green.',
+    text: 'Bristol SOP route. H2 300 sccm; strike 15 Torr at 0.70 kW; ramp with P \u2248 10p; add CH4 at ~50 Torr; run ~45 Torr at 900 W; substrate 750 to 900 C.',
   },
 }

@@ -99,9 +99,8 @@ not drop pressure while leaving power high.** Both push the ball upward into the
 Consequences of the current numbers, worth checking against reality:
 
 - H2 strike at 20 Torr and 700 W leaves about 19 mm clearance, comfortably safe.
-- CO2/CH4 strike at 12 Torr and 1000 W leaves about 5 mm clearance, so it is already
-  marginally inside the damage margin. The trainee has roughly a minute at strike condition
-  before damage becomes significant, which forces a prompt ramp.
+- CO2/CH4 strikes at the same low pressure and power as the H2 route, so strike-condition
+  clearance is comfortable; the window risk comes from dropping pressure with power still high.
 - Normal run condition, 45 Torr at 1000 W, leaves about 26 mm clearance.
 
 **Open question for Bristol:** is window failure actually caused by the ball touching or
@@ -120,8 +119,7 @@ T_coolant = 18 C
 
 The heating fraction depends on hydrogen content because atomic hydrogen recombining on the
 substrate surface is a large heat source. This is the physical reason an oxygen containing
-chemistry can run several hundred degrees cooler at the same delivered power, which is the
-whole basis of the low temperature CO2/CH4 route.
+chemistry can run cooler than a hydrogen discharge at the same delivered power.
 
 With these constants:
 
@@ -162,8 +160,9 @@ and 620 C for oxygen containing ones, and by plasma stability.
 Worked examples:
 
 - H2 300 sccm with CH4 3 sccm gives excess 0.0035, inside the domain, forgiving.
-- CH4 52 sccm with CO2 48 sccm indicated gives excess near 0.010, close to optimum.
-- CH4 48 sccm with CO2 52 sccm indicated gives a negative excess, so the film etches.
+- A slightly carbon-rich CO2/CH4 mix (a little more CH4 than CO2 by true flow) sits just
+  inside the diamond domain. These are illustrative values, not real process conditions.
+- Tip the balance oxygen-rich and the excess goes negative, so the film etches, not grows.
 
 That asymmetry is the single most important thing the CO2/CH4 exercise teaches. The window is
 narrow in a way that H2/CH4 is not.

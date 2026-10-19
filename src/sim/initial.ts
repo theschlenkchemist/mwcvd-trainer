@@ -93,7 +93,7 @@ export function initialState(recipe: Recipe = 'CO2CH4'): SimState {
     faultChance: 0.55,
     nextFaultCheck: 45,
     faults: [],
-    stuck: { attempts: {}, hinted: [], currentStep: '', timeOnStep: 0, strikeAttemptStarted: null },
+    stuck: { attempts: {}, hinted: [], currentStep: '', timeOnStep: 0, strikeAttemptStarted: null, actionsSinceProgress: 0, stuckHintShown: false },
     log: [{ t: 0, kind: 'ok', text: 'Session started. Rig cold, chamber at atmosphere.' }],
     score: { stepsCompleted: [], violations: [], timeOutsideEnvelope: 0 },
   }

@@ -13,6 +13,8 @@ export interface Dialogue {
   priority?: number
   trigger: Trigger
   once?: boolean
+  /** When true, show the triggering log line's own text rather than `lines`. */
+  useLogText?: boolean
   lines: { text: string }[]
   choices?: Choice[]
 }
@@ -29,6 +31,14 @@ export const DIALOGUES: Dialogue[] = [
     lines: [
       { text: 'Plasma struck. Good — check reflected power and tune the stubs to reduce it.' },
     ],
+  },
+  {
+    id: 'stuck_no_progress',
+    priority: 12,
+    trigger: { type: 'log', kind: 'hint', contains: 'Not advancing' },
+    once: false,
+    useLogText: true,
+    lines: [{ text: '' }],
   },
   {
     id: 'no_strike_hint',

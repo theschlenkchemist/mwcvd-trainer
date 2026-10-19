@@ -77,7 +77,17 @@ export type Action =
   | { type: 'speed'; value: number }
   | { type: 'utility'; key: 'mains' | 'coolingWater' | 'extraction'; on: boolean }
 
+// Deliberate, discrete operator actions (button and toggle clicks). Continuous
+// slider drags are excluded, so dragging a setpoint does not look like being
+// stuck. Used to decide when the Coach should offer "no progress" help.
+const COUNTED_ACTIONS = new Set([
+  'loadSample', 'pump', 'vent', 'throttleMode', 'cylinder', 'panelValve',
+  'mfcChannel', 'genPower', 'genStandby', 'genRun', 'autoTune',
+  'resetInterlock', 'utility',
+])
+
 export function apply(s: SimState, a: Action) {
+  if (COUNTED_ACTIONS.has(a.type)) s.stuck.actionsSinceProgress++
   switch (a.type) {
     case 'jack': {
       if (s.chamber.pressure < 700) {
